@@ -1,29 +1,64 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <section class="layout-wrapper">
+    <section class="layout-header"><Header /></section>
+    <section class="layout-main">
+      <section class="layout-leftside"><LeftSide /></section>
+      <section class="layout-content"><Main /></section>
+      <section class="layout-rightside"><RightSide /></section>
+    </section>
+  </section>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+
+import Main from "@/views/Main.vue";
+import Header from "@/views/Header.vue";
+import LeftSide from "@/views/LeftSide.vue";
+import RightSide from "@/views/RightSide.vue";
+
+export default defineComponent({
+  name: "Table",
+  components: { Main, Header, LeftSide, RightSide },
+  setup() {
+    return {};
+  },
+});
+</script>
+
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body,
+html {
+  height: 100%;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+#app {
+  height: 100%;
+}
+.layout-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  .layout-header {
+    height: 50px;
+    width: 100%;
+  }
+  .layout-main {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 50px);
+    .layout-leftside {
+      width: 250px;
+      height: 100%;
+    }
+    .layout-content {
+      flex: 1;
+      border-right: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+    }
+    .layout-rightside {
+      width: 300px;
+      height: 100%;
     }
   }
 }

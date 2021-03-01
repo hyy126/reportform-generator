@@ -7,18 +7,25 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "ant-design-vue": "^2.0.0",
+    "reset-css": "^5.0.1",
+    "sortablejs": "^1.13.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.10.6",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "compression-webpack-plugin": "^7.1.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "typescript": "~3.9.3"
+    "style-resources-loader": "^1.4.1",
+    "typescript": "~3.9.3",
+    "webpack-bundle-analyzer": "^4.4.0"
   }
 }

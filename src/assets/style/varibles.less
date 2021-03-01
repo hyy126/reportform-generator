@@ -1,0 +1,110 @@
+/* prettier-ignore */
+@max-w : 1200px;
+@borderRadius10: 10px;
+@borderColor: #eeeeee;
+@greyFontColor: #999999;
+@mainBackground: #f9f9f9;
+@mainThemeColor: #1890ff; //f9c000 #1890ff  #ff9900
+@redColor: #e22a2a;
+@redColor2: #fd4259;
+@redColorShallow: #f56c6c;
+
+
+@orangeColor: #e0861d;
+@blackColor: #4f4643;
+@greenColor: #47b24f;
+@black--title-color: #231815;
+@table-thead-backcolor: #cbb672;
+@shallowColor: #fef8e5;
+
+.ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//多行文本超出省略号
+.ellipsisAny(@num: 2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /*! autoprefixer  :off*/
+  -webkit-box-orient: vertical;
+  /*! autoprefixer  :on*/
+  -webkit-line-clamp: @num;
+  word-break: break-word;
+}
+
+//按钮等涟漪效果
+.btn-ripple() {
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.3s linear, border 0.3s linear;
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #000 10%, rgba(0, 0, 0, 0) 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+  }
+
+  &:active:after {
+    transform: scale(0);
+    opacity: 0.2;
+    transition: 0s;
+  }
+}
+
+@keyframes sportAnimation {
+  from {
+    offset-distance: 0%;
+  }
+
+  to {
+    offset-distance: 100%;
+  }
+}
+
+//循环延时动画
+.animation-delays(@n, @i: 1) when (@i =< @n) {
+  .delay@{i} {
+    animation-delay: (200ms * @i);
+  }
+
+  .animation-delays(@n, (@i+1));
+}
+
+.element-hover(@color: rgba(0, 0, 0, 0.15)) {
+  box-shadow: 0 6px 8px @color;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconzhankai {
+  transition: transform 0.3s;
+}
+
+.iconzhankai.active {
+  transform: rotate(180deg);
+  color: @mainThemeColor !important;
+}
+
+.iconrili.active {
+  color: @mainThemeColor !important;
+}
