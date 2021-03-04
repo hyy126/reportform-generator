@@ -29,7 +29,7 @@ export const copyArray = (data: any[]) => {
 }
 
 //拷贝对象
-export const copyObject = (data: object) => {
+export const copyObject = <T = any>(data: object): T => {
   return JSON.parse(JSON.stringify(data))
 }
 
@@ -48,21 +48,24 @@ interface IDeepFindParam {
 export const deepFind = (tree: any, deepFindParam: IDeepFindParam) => {
   const { prop = 'id', matchValue, childProp = 'children' } = deepFindParam
   let matchIndex = -1
+  let parent = tree
 
   for (let i = 0; i < tree.length; i++) {
     if (tree[i][prop] === matchValue) {
       matchIndex = i;
       break;
     }
-    if (tree[childProp]) {
-      const { matchIndex } = deepFind(tree[childProp], deepFindParam)
-      if (matchIndex !== -1) {
+    if (tree[i][childProp]) {
+      const { parent: childParent, matchIndex: matchIndexChild } = deepFind(tree[i][childProp], deepFindParam)
+      if (matchIndexChild !== -1) {
+        matchIndex = matchIndexChild
+        parent = childParent;
         break;
       }
     }
   }
 
-  return { parent: tree, matchIndex }
+  return { parent, matchIndex }
 }
 
 //文件导出

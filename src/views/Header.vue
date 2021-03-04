@@ -1,6 +1,6 @@
 <template>
   <section class="Header-wrapper">
-    <div class="title">报表生成器</div>
+    <div class="title">Reportform-Generator</div>
   </section>
 </template>
 

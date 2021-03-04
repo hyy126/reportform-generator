@@ -25,12 +25,12 @@ import { defineComponent } from "vue";
 
 import { componentList } from "@/config";
 
-import { ComponentManage } from "@/hooks/ComponentManage";
+import { useComponentManage } from "@/hooks/useComponentManage";
 
 export default defineComponent({
   name: "LeftSide",
   setup() {
-    const { addComponent } = ComponentManage();
+    const { addComponent } = useComponentManage();
 
     return { componentList, addComponent };
   },

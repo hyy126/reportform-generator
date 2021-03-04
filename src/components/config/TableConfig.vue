@@ -29,16 +29,16 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue";
 
-import { useConfig } from "@/hooks/useConfig";
+import { useTableConfig } from "@/hooks/useTableConfig";
 
 import Sortable, { SortableEvent } from "sortablejs";
 
-let uuid = 0;
+let uuid = 3;
 
 export default defineComponent({
   name: "TableConfig",
   setup() {
-    const { columns, dataSource, changeData } = useConfig();
+    const { columns, dataSource, changeData } = useTableConfig();
 
     const dataSourceStr = ref(JSON.stringify(dataSource.value, null, 2));
     const addColumn = () => {
@@ -46,9 +46,9 @@ export default defineComponent({
       let column = {
         title: "demo列",
         dataIndex,
+        key: dataIndex,
       };
       columns.value.push(column);
-      //dataSource.value[0][dataIndex] = dataIndex;
     };
 
     const removeColumn = (index: number) => {
@@ -76,7 +76,7 @@ export default defineComponent({
       try {
         changeData("dataSource", JSON.parse(dataSourceStr.value || "[]"));
       } catch (error) {
-        console.log(dataSourceStr.value);
+        console.log("异常:::", dataSourceStr.value);
       }
     });
 

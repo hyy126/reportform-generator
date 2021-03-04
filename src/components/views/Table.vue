@@ -7,22 +7,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
-
-import { useConfig } from "@/hooks/useConfig";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Table",
   props: {
     componentProp: Object,
   },
-  setup() {
-    // const { columns, dataSource } = useConfig();
-    // return {
-    //   columns,
-    //   dataSource,
-    // };
-  },
+  setup() {},
 });
 </script>
 

@@ -1,17 +1,10 @@
 <template>
   <section
-    class="custom-component-wrapper"
+    class="FormContainer-component-wrapper"
     :class="active ? 'active' : ''"
     @click.stop="selectComponent(componentObj)"
   >
-    <div class="component-drag" v-show="active">
-      <i class="iconfont iconDrag"></i>
-    </div>
-    <div
-      class="component-delete"
-      v-show="active"
-      @click.stop="deleteComponent(componentObj)"
-    >
+    <div class="component-delete" @click.stop="deleteComponent(componentObj)">
       <i class="iconfont icondelete"></i>
     </div>
     <slot></slot>
@@ -19,12 +12,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { useComponentManage } from "@/hooks/useComponentManage";
 
 export default defineComponent({
-  name: "ComponentWrapper",
+  name: "FormElWrapper",
   props: {
     componentObj: Object,
     active: {
@@ -41,32 +34,23 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.custom-component-wrapper {
+.FormContainer-component-wrapper {
   position: relative;
-  margin: 10px;
-  border: 1px dashed #ccc;
-  padding: 10px;
-  .component-drag {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    .flex-center();
-    background: @mainThemeColor;
-    z-index: 1;
-    color: #fff;
-    cursor: move;
-  }
+  padding: 10px 5px;
+  border-radius: 6px;
+  cursor: move;
+  width: 100%;
   .component-delete {
+    display: none;
     position: absolute;
     right: 10%;
     top: -10px;
     width: 22px;
     height: 22px;
     border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
     border: 1px solid @redColorShallow;
-    .flex-center();
     z-index: 1;
     color: @redColorShallow;
     cursor: pointer;
@@ -79,8 +63,12 @@ export default defineComponent({
       background: @redColorShallow;
     }
   }
-  &.active {
-    border-color: @mainThemeColor;
+  &.active,
+  &:hover {
+    background: #f6f7ff;
+    .component-delete {
+      display: inline;
+    }
   }
 }
 </style>
