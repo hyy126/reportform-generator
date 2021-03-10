@@ -1,6 +1,7 @@
 <template>
-  <a-input
+  <a-date-picker
     v-model:value="model[formAttribute.field]"
+    :format="componentProp.format"
     :placeholder="formAttribute.placeholder"
     :allowClear="formAttribute.allowClear"
     :disabled="formAttribute.disabled"
@@ -8,15 +9,16 @@
 </template>
 
 <script lang="ts">
-import { IFormAttribute, IInputComponent } from "@/typings";
+import { IDatePickerComponent, IFormAttribute } from "@/typings";
 import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
-  name: "Input",
+  name: "DatePicker",
   props: {
-    componentProp: Object as PropType<IInputComponent>,
+    componentProp: Object as PropType<IDatePickerComponent>,
     model: Object,
     formAttribute: Object as PropType<IFormAttribute>,
   },
+  setup() {},
 });
 </script>

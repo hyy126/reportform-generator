@@ -1,5 +1,6 @@
 <template>
   <section class="Main-wrapper">
+    {{ componentList }}
     <ComponentWrapper
       v-for="component in componentList"
       :key="'component-custom-' + component.id"
@@ -9,12 +10,12 @@
       <component :is="component.type" :componentProp="component.config">
         <template v-if="component.children">
           <a-col
-            :xs="24"
-            :sm="24"
-            :md="24"
-            :lg="12"
-            :xl="12"
-            :xxl="8"
+            :xs="child.formAttribute.grid.xs"
+            :sm="child.formAttribute.grid.sm"
+            :md="child.formAttribute.grid.md"
+            :lg="child.formAttribute.grid.lg"
+            :xl="child.formAttribute.grid.xl"
+            :xxl="child.formAttribute.grid.xxl"
             v-for="child in component.children"
             :key="'component-custom-form-' + child.id"
           >
@@ -22,15 +23,20 @@
               :active="child.id === curSelectComponent.id"
               :componentObj="child"
             >
-              <component
-                :is="child.type"
-                :componentProp="child.config"
-                :model="component.config.model"
+              <CommonFormView
+                :formAttribute="child.formAttribute"
                 :labelCol="component.config.labelCol"
                 :wrapperCol="component.config.wrapperCol"
               >
-              </component
-            ></FormElWrapper>
+                <component
+                  :is="child.type"
+                  :componentProp="child.config"
+                  :formAttribute="child.formAttribute"
+                  :model="component.config.model"
+                >
+                </component>
+              </CommonFormView>
+            </FormElWrapper>
           </a-col>
         </template>
       </component>
@@ -43,9 +49,14 @@ import { defineComponent, nextTick, onMounted, watchEffect } from "vue";
 
 import Table from "@/components/views/Table.vue";
 import Input from "@/components/views/Input.vue";
+import Select from "@/components/views/Select.vue";
+import DatePicker from "@/components/views/DatePicker.vue";
 import FormContainer from "@/components/views/FormContainer.vue";
 import ComponentWrapper from "@/components/ComponentWrapper.vue";
 import FormElWrapper from "@/components/FormElWrapper.vue";
+
+import CommonFormView from "@/components/views/CommonFormView.vue";
+
 import { useComponentManage, componentList } from "@/hooks/useComponentManage";
 
 import Sortable, { SortableEvent } from "sortablejs";
@@ -54,7 +65,16 @@ let formSortList: Sortable[] = [];
 
 export default defineComponent({
   name: "Main",
-  components: { ComponentWrapper, FormElWrapper, Table, FormContainer, Input },
+  components: {
+    ComponentWrapper,
+    FormElWrapper,
+    CommonFormView,
+    Table,
+    FormContainer,
+    Input,
+    Select,
+    DatePicker,
+  },
   setup() {
     const { componentList, curSelectComponent } = useComponentManage();
 
@@ -78,7 +98,7 @@ export default defineComponent({
         formSortList.forEach((sort) => {
           sort.destroy();
         });
-        formSortList = []
+        formSortList = [];
         const formContainerList = document.querySelectorAll(
           ".formContainer > .ant-row"
         );
@@ -96,7 +116,7 @@ export default defineComponent({
         });
       });
     });
-
+    //console.log((Input.render as Function)());
     return { componentList, curSelectComponent };
   },
 });

@@ -8,23 +8,26 @@
       :componentProp="componentProp"
       :formAttribute="formAttribute"
     />
-    <a-form-item label="默认值">
-      <a-input v-model:value="componentProp.defaultValue" />
+    <a-form-item label="格式">
+      <a-input v-model:value="componentProp.format" />
     </a-form-item>
+    <!-- <a-form-item label="默认值">
+      <a-input v-model:value="componentProp.defaultValue" />
+    </a-form-item> -->
   </a-form>
 </template>
 
 <script lang="ts">
-import { IFormAttribute, IInputComponent } from "@/typings";
-import { defineComponent, PropType, ref } from "vue";
+import { IDatePickerComponent, IFormAttribute } from "@/typings";
+import { defineComponent, PropType } from "vue";
 
 import CommonFormConfig from "./CommonFormConfig.vue";
 
 export default defineComponent({
-  name: "InputConfig",
+  name: "DatePickerConfig",
   props: {
     componentProp: {
-      type: Object as PropType<IInputComponent>,
+      type: Object as PropType<IDatePickerComponent>,
       required: true,
     },
     formAttribute: {

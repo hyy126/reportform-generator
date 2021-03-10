@@ -4,6 +4,9 @@
     <component
       :is="curConfigComponent"
       :componentProp="curSelectComponent ? curSelectComponent.config : {}"
+      :formAttribute="
+        curSelectComponent ? curSelectComponent.formAttribute : {}
+      "
     />
   </section>
 </template>
@@ -13,13 +16,22 @@ import { defineComponent, ref, watchEffect } from "vue";
 
 import TableConfig from "@/components/config/TableConfig.vue";
 import InputConfig from "@/components/config/InputConfig.vue";
+import SelectConfig from "@/components/config/SelectConfig.vue";
+import DatePickerConfig from "@/components/config/DatePickerConfig.vue";
+
 import FormContainerConfig from "@/components/config/FormContainerConfig.vue";
 
 import { curSelectComponent } from "@/hooks/useComponentManage";
 
 export default defineComponent({
   name: "RightSide",
-  components: { TableConfig, InputConfig, FormContainerConfig },
+  components: {
+    TableConfig,
+    InputConfig,
+    SelectConfig,
+    DatePickerConfig,
+    FormContainerConfig,
+  },
   setup() {
     const curConfigComponent = ref("");
 

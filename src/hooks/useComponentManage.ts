@@ -1,3 +1,4 @@
+import { copyObject } from './../utils/index';
 import { ITableComponent } from '@/typings';
 import { IComponent, componentType, formTypeArray } from '@/typings/index';
 import { deepFind } from '@/utils/index';
@@ -11,6 +12,10 @@ export const componentList = ref<IComponent[]>([])
 //当前选中组件
 export const curSelectComponent = ref<IComponent>();
 
+// setInterval(() => {
+//   window.localStorage.componentlist = JSON.stringify(componentList.value)
+// }, 5000)
+
 /**
  * 根据类型创建组件
  * @param type 
@@ -20,12 +25,21 @@ const createComponent = (type: componentType) => {
 }
 
 /**
+ * 根据模型替换组件
+ * @param model 
+ */
+const replaceComponentByModel = (model: IComponent[]) => {
+  const copyModel = copyObject<IComponent[]>(model)
+  curSelectComponent.value = copyModel[0]
+  componentList.value = copyModel
+}
+
+/**
  * 根据组件类型添加组件
  * @param type 
  */
 const addComponent = (type: componentType) => {
   const component = createComponent(type)
-
   const isFormType = formTypeArray.includes(type)
 
   //表单元素插入到第一个表单容器children
@@ -42,8 +56,8 @@ const addComponent = (type: componentType) => {
       firstFormContainer = createComponent('FormContainer')
       componentList.value.unshift(firstFormContainer)
     }
-    //构建父子链
-    component.parent = firstFormContainer
+    //构建父子链  json.stringify 循环引用出错
+    //component.parent = firstFormContainer
     firstFormContainer.children?.push(component)
   }
 
@@ -99,6 +113,7 @@ export const useComponentManage = () => {
     curSelectComponent,
     componentList,
     addComponent,
+    replaceComponentByModel,
     deleteComponent,
     selectComponent
   }

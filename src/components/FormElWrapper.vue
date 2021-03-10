@@ -34,6 +34,10 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.FormContainer-component-wrapper:deep(.ant-form-item) {
+  margin-bottom: 0 !important;
+}
+
 .FormContainer-component-wrapper {
   position: relative;
   padding: 10px 5px;

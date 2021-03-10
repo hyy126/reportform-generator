@@ -10,7 +10,7 @@
         <li
           v-for="(componentObj, index2) in item.list"
           :key="'componentObj-' + item.key + index2"
-          @click="addComponent(componentObj.type)"
+          @click="selectComponent(componentObj)"
         >
           <i :class="['iconfont', componentObj.icon]"></i>
           {{ componentObj.name }}
@@ -26,13 +26,23 @@ import { defineComponent } from "vue";
 import { componentList } from "@/config";
 
 import { useComponentManage } from "@/hooks/useComponentManage";
+import { IComponent } from "@/typings";
 
 export default defineComponent({
   name: "LeftSide",
   setup() {
-    const { addComponent } = useComponentManage();
+    const { addComponent, replaceComponentByModel } = useComponentManage();
 
-    return { componentList, addComponent };
+    const selectComponent = (componnetObj: any) => {
+      const { type, list } = componnetObj;
+      if (type) {
+        addComponent(type);
+      } else if (list) {
+        replaceComponentByModel(list);
+      }
+    };
+
+    return { componentList, selectComponent };
   },
 });
 </script>
@@ -45,6 +55,7 @@ export default defineComponent({
   .component-list {
     margin: 20px 0;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     li {
       width: 108px;
@@ -57,6 +68,7 @@ export default defineComponent({
       cursor: move;
       box-sizing: border-box;
       border-radius: 6px;
+      margin-bottom: 10px;
       i {
         margin-right: 10px;
       }

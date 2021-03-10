@@ -1,22 +1,14 @@
 <template>
   <section class="TableConfig-wrapper">
     <a-divider>列属性</a-divider>
-    <section id="col-edit-id">
-      <div
-        class="col-edit-wrapper"
-        v-for="(item, index) in columns"
-        :key="'col-edit-wrapper-' + item.key"
-      >
-        <i class="iconfont iconpaixu"></i>
-        <a-input v-model:value="item.title" placeholder="列名" />
-        <a-input v-model:value="item.dataIndex" placeholder="列值" />
-        <i class="iconfont iconjian" @click="removeColumn(index)"></i>
-      </div>
-    </section>
 
-    <div class="add-wrapper" @click="addColumn">
-      <i class="iconfont iconjia"></i><span>添加列</span>
-    </div>
+    <ChangeList :list="columns" @addColumn="addColumn">
+      <template #default="scope">
+        <a-input v-model:value="scope.item.title" placeholder="列名" />
+        <a-input v-model:value="scope.item.dataIndex" placeholder="列值" />
+      </template>
+    </ChangeList>
+
     <a-divider>测试数据</a-divider>
     <a-textarea
       v-model:value="dataSourceStr"
@@ -27,16 +19,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 
 import { useTableConfig } from "@/hooks/useTableConfig";
 
-import Sortable, { SortableEvent } from "sortablejs";
+import ChangeList from "@/components/common/ChangeList.vue";
 
 let uuid = 3;
 
 export default defineComponent({
   name: "TableConfig",
+  components: { ChangeList },
   setup() {
     const { columns, dataSource, changeData } = useTableConfig();
 
@@ -50,23 +43,6 @@ export default defineComponent({
       };
       columns.value.push(column);
     };
-
-    const removeColumn = (index: number) => {
-      columns.value.splice(index, 1);
-    };
-
-    onMounted(() => {
-      const el = document.getElementById("col-edit-id")!;
-      const sortable = new Sortable(el, {
-        handle: ".iconpaixu",
-        /* SortableEvent */
-        onSort: function (evt: SortableEvent) {
-          const { newIndex, oldIndex } = evt;
-          const moveColumn = columns.value.splice(oldIndex!, 1)[0];
-          columns.value.splice(newIndex!, 0, moveColumn);
-        },
-      });
-    });
 
     watch(dataSource, () => {
       dataSourceStr.value = JSON.stringify(dataSource.value, null, 2);
@@ -84,7 +60,6 @@ export default defineComponent({
       columns,
       dataSourceStr,
       addColumn,
-      removeColumn,
     };
   },
 });

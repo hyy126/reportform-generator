@@ -1,3 +1,4 @@
+import { standardModel } from './Model/model1';
 export const componentList = [
   {
     title: "容器组件",
@@ -23,6 +24,16 @@ export const componentList = [
         icon: "iconduoxuan",
         name: "多行文本",
       },
+      {
+        type: 'Select',
+        icon: "iconxiala",
+        name: "下拉选择",
+      },
+      {
+        type: 'DatePicker',
+        icon: "iconshijian",
+        name: "日期选择",
+      },
     ],
   },
   {
@@ -44,6 +55,9 @@ export const componentList = [
   {
     title: "模板",
     key: "model",
-    list: []
+    list: [{
+      name: "标准模板",
+      list: standardModel
+    }]
   },
 ];
