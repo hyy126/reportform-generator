@@ -4,17 +4,32 @@ import { IComponent, componentType, formTypeArray } from '@/typings/index';
 import { deepFind } from '@/utils/index';
 import { changeTableComponent } from './useTableConfig';
 import { getComponentConfigByType } from '@/config/ComponentConfig/index';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
+let initComponentList = []
+
+try {
+  initComponentList = window.localStorage._componentlist ? JSON.parse(window.localStorage._componentlist) : []
+} catch (error) {
+
+}
+console.log(initComponentList)
 // 组件集合
-export const componentList = ref<IComponent[]>([])
+export const componentList = ref<IComponent[]>(initComponentList)
 
 //当前选中组件
-export const curSelectComponent = ref<IComponent>();
+export const curSelectComponent = ref<IComponent>(initComponentList[0] || null);
 
 // setInterval(() => {
 //   window.localStorage.componentlist = JSON.stringify(componentList.value)
 // }, 5000)
+
+watch(componentList, () => {
+  console.log('componentListChange')
+  window.localStorage._componentlist = JSON.stringify(componentList.value)
+}, {
+  deep: true
+})
 
 /**
  * 根据类型创建组件
@@ -22,6 +37,14 @@ export const curSelectComponent = ref<IComponent>();
  */
 const createComponent = (type: componentType) => {
   return getComponentConfigByType(type)
+}
+
+/**
+ * 清空组件列表
+ * @param model 
+ */
+const clearComponentList = () => {
+  componentList.value = []
 }
 
 /**
@@ -115,6 +138,7 @@ export const useComponentManage = () => {
     addComponent,
     replaceComponentByModel,
     deleteComponent,
-    selectComponent
+    selectComponent,
+    clearComponentList
   }
 } 

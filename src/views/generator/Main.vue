@@ -1,6 +1,5 @@
 <template>
   <section class="Main-wrapper">
-    {{ componentList }}
     <ComponentWrapper
       v-for="component in componentList"
       :key="'component-custom-' + component.id"
@@ -124,7 +123,7 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .Main-wrapper {
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   height: 100%;
   overflow: auto;
   // .custom-component-wrapper {

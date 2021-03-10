@@ -1,5 +1,4 @@
 <template>
-  {{ componentProp }}
   <a-form
     :model="componentProp.model"
     :label-col="componentProp.labelCol"
