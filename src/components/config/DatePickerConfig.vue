@@ -11,9 +11,13 @@
     <a-form-item label="格式">
       <a-input v-model:value="componentProp.format" />
     </a-form-item>
-    <!-- <a-form-item label="默认值">
-      <a-input v-model:value="componentProp.defaultValue" />
-    </a-form-item> -->
+    <a-form-item label="默认值">
+      <a-date-picker
+        v-model:value="formAttribute.defaultValue"
+        :format="componentProp.format"
+        :valueFormat="componentProp.valueFormat"
+      />
+    </a-form-item>
   </a-form>
 </template>
 

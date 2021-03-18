@@ -1,7 +1,8 @@
 <template>
   <a-date-picker
-    v-model:value="model[formAttribute.field]"
+    v-model:value="formAttribute.defaultValue"
     :format="componentProp.format"
+    :valueFormat="componentProp.valueFormat"
     :placeholder="formAttribute.placeholder"
     :allowClear="formAttribute.allowClear"
     :disabled="formAttribute.disabled"

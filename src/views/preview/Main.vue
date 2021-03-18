@@ -8,12 +8,7 @@
     >
       <template v-if="component.children">
         <a-col
-          :xs="child.formAttribute.grid.xs"
-          :sm="child.formAttribute.grid.sm"
-          :md="child.formAttribute.grid.md"
-          :lg="child.formAttribute.grid.lg"
-          :xl="child.formAttribute.grid.xl"
-          :xxl="child.formAttribute.grid.xxl"
+          v-bind="child.formAttribute.grid"
           v-for="child in component.children"
           :key="'component-custom-form-' + child.id"
         >

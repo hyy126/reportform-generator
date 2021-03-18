@@ -1,16 +1,16 @@
-<template>
+ <template>
   <a-input
-    v-model:value="model[formAttribute.field]"
+    v-model:value="formAttribute.defaultValue"
     :placeholder="formAttribute.placeholder"
     :allowClear="formAttribute.allowClear"
     :disabled="formAttribute.disabled"
   />
-</template>
+</template> 
 
-<script lang="ts">
+ <script lang="tsx">
 import { IFormAttribute, IInputComponent } from "@/typings";
-import { defineComponent, PropType } from "vue";
-
+import { defineComponent, h, PropType } from "vue";
+import { Input } from "ant-design-vue";
 export default defineComponent({
   name: "Input",
   props: {
@@ -18,5 +18,6 @@ export default defineComponent({
     model: Object,
     formAttribute: Object as PropType<IFormAttribute>,
   },
+  setup(prop) {},
 });
 </script>

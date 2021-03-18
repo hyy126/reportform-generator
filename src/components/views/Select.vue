@@ -1,6 +1,6 @@
 <template>
   <a-select
-    v-model:value="model[formAttribute.field]"
+    v-model:value="formAttribute.defaultValue"
     :disabled="formAttribute.disabled"
     :allowClear="formAttribute.allowClear"
     :placeholder="formAttribute.placeholder"

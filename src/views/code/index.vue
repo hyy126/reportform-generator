@@ -1,50 +1,66 @@
 <template>
-  <Monaco :value="value" :language="language" />
+  <MonacoWrapper :tabList="tabList" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Monaco from "@/components/common/Monaco.vue";
+import MonacoWrapper from "@/components/common/MonacoWrapper.vue";
+import { genCode } from "@/utils/genCode";
+import { useComponentManage } from "@/hooks/useComponentManage";
 
 export default defineComponent({
   name: "Operation",
-  components: { Monaco },
-  setup() {
-    const value = `import { defineComponent, nextTick, onMounted, watchEffect } from "vue";
-
-import Table from "@/components/views/Table.vue";
-import Input from "@/components/views/Input.vue";
-import Select from "@/components/views/Select.vue";
-import DatePicker from "@/components/views/DatePicker.vue";
-import FormContainer from "@/components/views/FormContainer.vue";
-
-import CommonFormView from "@/components/views/CommonFormView.vue";
-
-import { useComponentManage, componentList } from "@/hooks/useComponentManage";
-
-import Sortable, { SortableEvent } from "sortablejs";
-
-let formSortList: Sortable[] = [];
-
-export default defineComponent({
-  name: "PreviewMain",
-  components: {
-    CommonFormView,
-    Table,
-    FormContainer,
-    Input,
-    Select,
-    DatePicker,
-  },
+  components: { MonacoWrapper },
   setup() {
     const { componentList } = useComponentManage();
+    const { indexTemplate, formTemplate, tableTemplate } = genCode(
+      componentList.value
+    );
 
-    return { componentList };
-  },
-});`;
-    const language = "typescript";
+    const tabList = [
+      {
+        value: indexTemplate,
+        language: "html",
+        icon: "iconvue",
+        title: "index.vue",
+      },
+      {
+        value: tableTemplate,
+        language: "html",
+        icon: "iconvue",
+        title: "table.vue",
+      },
+      {
+        value: formTemplate,
+        language: "html",
+        icon: "iconvue",
+        title: "form.vue",
+      },
+      // {
+      //   value: script,
+      //   language: "typescript",
+      //   icon: "iconjs",
+      //   title: "script",
+      // },
+      // {
+      //   value: css,
+      //   language: "css",
+      //   icon: "iconcss",
+      //   title: "css",
+      // },
+      {
+        value: `${JSON.stringify(
+          JSON.parse(window.localStorage._componentlist),
+          null,
+          2
+        )}`,
+        language: "json",
+        icon: "iconjson",
+        title: "index.json",
+      },
+    ];
 
-    return { value, language };
+    return { tabList };
   },
 });
 </script>

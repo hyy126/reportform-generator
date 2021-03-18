@@ -7,16 +7,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { ITableComponent } from "@/typings";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   name: "Table",
   props: {
-    componentProp: Object,
+    componentProp: Object as PropType<ITableComponent>,
   },
   setup() {},
 });
 </script>
-
-<style lang="less" scoped>
-</style>

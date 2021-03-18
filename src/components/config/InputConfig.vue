@@ -9,7 +9,7 @@
       :formAttribute="formAttribute"
     />
     <a-form-item label="默认值">
-      <a-input v-model:value="componentProp.defaultValue" />
+      <a-input v-model:value="formAttribute.defaultValue" />
     </a-form-item>
   </a-form>
 </template>

@@ -25,14 +25,6 @@ const routes: Array<RouteRecordRaw> = [
       title: '代码'
     },
     component: () => import(/* webpackChunkName: "code" */ '@/views/code/index.vue')
-  },
-  {
-    path: '/json',
-    name: 'Json',
-    meta: {
-      title: 'json'
-    },
-    component: () => import(/* webpackChunkName: "json" */ '@/views/json/index.vue')
   }
 ]
 

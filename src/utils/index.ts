@@ -1,5 +1,7 @@
 import { message } from "ant-design-vue";
 import { App } from 'vue';
+import jszip from "jszip";
+
 message.config({
   //top: `250px`,
   duration: 2,
@@ -88,6 +90,10 @@ export const saveBlobAsFile = function (res: any, fileName: string = '下载文�
     type:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
   });
+  exportFile(blob, filename)
+};
+
+export const exportFile = (blob: Blob, filename: string) => {
   let reader = new FileReader();
   reader.readAsDataURL(blob);
   reader.onload = e => {
@@ -99,4 +105,26 @@ export const saveBlobAsFile = function (res: any, fileName: string = '下载文�
     a.click();
     document.body.removeChild(a);
   };
-};
+}
+
+export interface IFileObj {
+  title: string
+  content: string
+}
+
+//zip
+export const exportZipFile = (fileList: IFileObj[]) => {
+  let zip = new jszip();
+  fileList.forEach((file) => {
+    const { title, content } = file
+    zip.file(title, content);
+  })
+
+  //var img = zip.folder("images")!;
+  //img.file("Hello2.txt", "Hello2 World\n");
+
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    //saveAs(content, "example.zip");
+    exportFile(content, "component.zip")
+  });
+}

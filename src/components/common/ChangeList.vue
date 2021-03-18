@@ -1,5 +1,5 @@
 <template>
-  <section id="col-edit-id">
+  <section ref="colEditEl" class="col-edit-container">
     <div
       class="col-edit-wrapper"
       v-for="(item, index) in list"
@@ -10,13 +10,16 @@
       <i class="iconfont iconjian" @click="removeColumn(index)"></i>
     </div>
   </section>
-  <div class="add-wrapper" @click="addColumn">
-    <i class="iconfont iconjia"></i><span>添加</span>
+  <div class="operation-wrapper">
+    <div class="add-wrapper" @click="addColumn">
+      <i class="iconfont iconjia"></i><span>添加</span>
+    </div>
+    <slot name="footer"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 import { useTableConfig } from "@/hooks/useTableConfig";
 
@@ -42,9 +45,9 @@ export default defineComponent({
       prop.list.splice(index, 1);
     };
 
+    let colEditEl = ref<HTMLElement>();
     onMounted(() => {
-      const el = document.getElementById("col-edit-id")!;
-      const sortable = new Sortable(el, {
+      const sortable = new Sortable(colEditEl.value!, {
         handle: ".iconpaixu",
         /* SortableEvent */
         onSort: function (evt: SortableEvent) {
@@ -55,25 +58,27 @@ export default defineComponent({
       });
     });
 
-    return {
-      addColumn,
-      removeColumn,
-    };
+    return { colEditEl, addColumn, removeColumn };
   },
 });
 </script>
 
-<style lang="less" scoped>
-#col-edit-id:deep(input) {
-  margin: 0 5px;
-}
 
-#col-edit-id {
+<style lang="less" >
+.col-edit-wrapper > * {
+  margin: 0 5px !important;
+}
+</style>
+
+<style lang="less" scoped>
+.col-edit-container {
+  display: grid;
   .col-edit-wrapper {
     display: flex;
     align-items: center;
     height: 32px;
     margin: 5px 0;
+
     .iconpaixu {
       font-size: 20px;
       cursor: move;
@@ -89,15 +94,20 @@ export default defineComponent({
   }
 }
 
-.add-wrapper {
-  width: 100px;
+.operation-wrapper {
+  width: 100%;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  .iconjia {
-    color: @mainThemeColor;
-    font-size: 22px;
-    margin: 0 10px;
+  justify-content: space-between;
+  padding-right: 20px;
+  .add-wrapper {
+    cursor: pointer;
+    .flex-center();
+    .iconjia {
+      color: @mainThemeColor;
+      font-size: 22px;
+      margin: 0 10px;
+    }
   }
 }
 </style>

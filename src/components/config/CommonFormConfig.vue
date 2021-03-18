@@ -14,6 +14,15 @@
       checked-children="default"
       un-checked-children="custom"
     />
+    <a-tooltip color="blue">
+      <template #title>
+        <p>label与元素占比</p>
+        <p>1.default: 默认使用form占比</p>
+        <p>1.custom: 自定义占比</p>
+      </template>
+      <i class="iconfont iconV"></i>
+    </a-tooltip>
+
     <a-slider
       v-show="!formAttribute.useFormCol"
       v-model:value="formAttribute.labelCol.span"
@@ -66,3 +75,17 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="less" scoped>
+.iconV {
+  font-size: 26px;
+  position: absolute;
+  margin-left: 10px;
+  cursor: pointer;
+  &:hover {
+    color: @mainThemeColor;
+  }
+}
+p {
+  margin-bottom: 0;
+}
+</style>

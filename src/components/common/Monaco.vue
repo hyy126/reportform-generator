@@ -29,6 +29,7 @@ export default defineComponent({
       });
 
       watchEffect(() => {
+        model && model.dispose();
         model = editor.createModel(prop.value, prop.language);
         monacoInstance.setModel(model);
       });
@@ -38,8 +39,11 @@ export default defineComponent({
       monacoInstance.dispose(); //使用完成销毁实例
     });
 
+    const getMonacoValue = () => monacoInstance.getValue();
+
     return {
       monacoEl,
+      getMonacoValue,
     };
   },
 });

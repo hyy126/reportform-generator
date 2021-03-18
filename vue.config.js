@@ -10,7 +10,7 @@ module.exports = {
     index: {
       entry: "./src/main.ts",
       title: "报表生成器",
-    },
+    }
   },
   css: {
     sourceMap: process.env.NODE_ENV !== "production",

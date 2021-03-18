@@ -1,5 +1,6 @@
 <template>
   <section class="Main-wrapper">
+    {{ componentList }}
     <ComponentWrapper
       v-for="component in componentList"
       :key="'component-custom-' + component.id"
@@ -9,12 +10,7 @@
       <component :is="component.type" :componentProp="component.config">
         <template v-if="component.children">
           <a-col
-            :xs="child.formAttribute.grid.xs"
-            :sm="child.formAttribute.grid.sm"
-            :md="child.formAttribute.grid.md"
-            :lg="child.formAttribute.grid.lg"
-            :xl="child.formAttribute.grid.xl"
-            :xxl="child.formAttribute.grid.xxl"
+            v-bind="child.formAttribute.grid"
             v-for="child in component.children"
             :key="'component-custom-form-' + child.id"
           >
@@ -27,13 +23,18 @@
                 :labelCol="component.config.labelCol"
                 :wrapperCol="component.config.wrapperCol"
               >
-                <component
+                <RenderFormItem
+                  :type="child.type"
+                  :componentProp="child.config"
+                  :formAttribute="child.formAttribute"
+                />
+                <!-- <component
                   :is="child.type"
                   :componentProp="child.config"
                   :formAttribute="child.formAttribute"
                   :model="component.config.model"
                 >
-                </component>
+                </component> -->
               </CommonFormView>
             </FormElWrapper>
           </a-col>
@@ -47,9 +48,9 @@
 import { defineComponent, nextTick, onMounted, watchEffect } from "vue";
 
 import Table from "@/components/views/Table.vue";
-import Input from "@/components/views/Input.vue";
-import Select from "@/components/views/Select.vue";
-import DatePicker from "@/components/views/DatePicker.vue";
+// import Input from "@/components/views/Input.vue";
+// import Select from "@/components/views/Select.vue";
+// import DatePicker from "@/components/views/DatePicker.vue";
 import FormContainer from "@/components/views/FormContainer.vue";
 import ComponentWrapper from "@/components/ComponentWrapper.vue";
 import FormElWrapper from "@/components/FormElWrapper.vue";
@@ -59,6 +60,8 @@ import CommonFormView from "@/components/views/CommonFormView.vue";
 import { useComponentManage, componentList } from "@/hooks/useComponentManage";
 
 import Sortable, { SortableEvent } from "sortablejs";
+
+import RenderFormItem from "@/components/renderFormItem";
 
 let formSortList: Sortable[] = [];
 
@@ -70,9 +73,10 @@ export default defineComponent({
     CommonFormView,
     Table,
     FormContainer,
-    Input,
-    Select,
-    DatePicker,
+    // Input,
+    // Select,
+    // DatePicker,
+    RenderFormItem,
   },
   setup() {
     const { componentList, curSelectComponent } = useComponentManage();
@@ -124,7 +128,7 @@ export default defineComponent({
 <style lang="less" scoped>
 .Main-wrapper {
   padding: 0 10px 10px 10px;
-  height: 100%;
+  height: calc(100% - 40px);
   overflow: auto;
   // .custom-component-wrapper {
   //   margin: 10px;

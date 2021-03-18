@@ -4,16 +4,13 @@ export type componentType = "Table" | "FormContainer" | "Input" | "Select" | "Da
 
 export const formTypeArray = ["Input", "Select", "DatePicker"]
 
+export type formType = "Input" | "Select" | "DatePicker"
+
 export type componentConfigType = ITableComponent | IInputComponent | IFormComtainerComponent | ISelectComponent
 
-export interface IFomGrid {
-  xs?: number
-  sm?: number
-  md?: number
-  lg?: number
-  xl?: number
-  xxl?: number
-}
+type gridType = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+
+export type IFomGrid = Record<gridType, number>
 
 export type formItemSize = 'large' | 'default' | 'small'
 
@@ -29,23 +26,32 @@ export interface IFormAttribute {
   labelCol: IGridCol
   wrapperCol: IGridCol
   size?: formItemSize
-  useFormCol?: Boolean   //是否使用上级表单栅格
-  allowClear?: Boolean
+  useFormCol?: boolean   //是否使用上级表单栅格
+  allowClear?: boolean
+  defaultValue?: string | number | Moment | null   //默认值
 }
 
 export interface IComponent<T = componentConfigType> {
   type: componentType
   id: number | string
+  link?: string                     //文档链接
   children?: IComponent[]
   parent?: IComponent
-  formAttribute?: IFormAttribute
-  config: T
+  formAttribute?: IFormAttribute    //form表单通用属性
+  config: T                         //组件配置
 }
 
-interface ITableColumn {
+export interface ITableColumn {
   title: string,
   dataIndex: string,
-  key: string
+  key: string,
+  sorter?: boolean,
+  ellipsis?: boolean,
+  width?: number,
+  colSpan?: number,
+  align?: 'left' | 'right' | 'center',
+  fixed?: false | true | 'left' | 'right',
+  children?: ITableColumn[] | null
 }
 
 export interface IDataSource {
@@ -64,12 +70,10 @@ export interface ITableComponent {
 
 /*单行文本 */
 export interface IInputComponent {
-  defaultValue?: string  //默认值
   prefix?: string        //前缀
   suffix?: string        //后缀
   maxlength?: number     //最大长度
   showCount?: boolean    //字数
-  value?: string | number
 }
 
 export interface IGridCol {
@@ -94,5 +98,6 @@ export interface ISelectComponent {
 export interface IDatePickerComponent {
   format: string | string[]
   disabledTime?: (date: Date) => {}
-  defaultPickerValue?: Moment
+  defaultPickerValue?: Moment | null
+  valueFormat?: string
 }

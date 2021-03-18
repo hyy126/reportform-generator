@@ -1,3 +1,4 @@
+import { ITableColumn } from './../typings/index';
 import { ITableComponent, IComponent } from '@/typings';
 import { reactive, toRefs } from "vue";
 
@@ -22,8 +23,28 @@ export const changeTableComponent = (component: IComponent<ITableComponent>) => 
   }
 }
 
+let uuid = 3;
+
+const createColumn = () => {
+  const dataIndex = "column-" + uuid++;
+  let column: ITableColumn = {
+    title: "demo列",
+    dataIndex,
+    key: dataIndex,
+    colSpan: 1,
+    align: 'left',
+    fixed: false,
+  };
+  return column
+}
+
+const addColumn = () => {
+  const column = createColumn()
+  reactiveData.columns.push(column);
+};
+
 export const useTableConfig = () => {
   return {
-    ...toRefs(reactiveData), changeData
+    ...toRefs(reactiveData), changeData, addColumn, createColumn
   };
 }

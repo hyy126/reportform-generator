@@ -3,22 +3,34 @@ import { IComponent, ITableComponent } from "@/typings"
 export const TableConfig: IComponent<ITableComponent> = {
   type: 'Table',
   id: -1,  // uuid 唯一
+  link: 'https://2x.antdv.com/components/table-cn#API',
   config: {
     columns: [
       {
         title: "姓名",
         dataIndex: "name",
-        key: "column0"
+        key: "column0",
+        colSpan: 1,
+        align: 'left',
+        fixed: false,
+        children: [{
+        } as any]
       },
       {
         title: "年龄",
         dataIndex: "age",
-        key: "column1"
+        key: "column1",
+        colSpan: 1,
+        align: 'left',
+        fixed: false,
       },
       {
         title: "住址",
         dataIndex: "address",
-        key: "column2"
+        key: "column2",
+        colSpan: 1,
+        align: 'left',
+        fixed: false
       },
     ],
     dataSource: [
@@ -30,5 +42,4 @@ export const TableConfig: IComponent<ITableComponent> = {
       },
     ]
   }
-
 }

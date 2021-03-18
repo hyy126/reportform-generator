@@ -7,6 +7,9 @@
         <a-input v-model:value="scope.item.title" placeholder="列名" />
         <a-input v-model:value="scope.item.dataIndex" placeholder="列值" />
       </template>
+      <template #footer>
+        <i class="iconfont icongengduo" @click="visible = true"></i>
+      </template>
     </ChangeList>
 
     <a-divider>测试数据</a-divider>
@@ -16,33 +19,32 @@
       placeholder="测试数据"
     />
   </section>
+  <a-modal
+    v-model:visible="visible"
+    width="1200px"
+    centered
+    title="表格列配置"
+    :footer="null"
+  >
+    <TableColumnConfig />
+  </a-modal>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-
 import { useTableConfig } from "@/hooks/useTableConfig";
-
 import ChangeList from "@/components/common/ChangeList.vue";
 
-let uuid = 3;
+import TableColumnConfig from "./table/TableColumnConfig2.vue";
 
 export default defineComponent({
   name: "TableConfig",
-  components: { ChangeList },
+  components: { ChangeList, TableColumnConfig },
+  props: ["componentProp", "formAttribute"],
   setup() {
-    const { columns, dataSource, changeData } = useTableConfig();
+    const { columns, dataSource, changeData, addColumn } = useTableConfig();
 
     const dataSourceStr = ref(JSON.stringify(dataSource.value, null, 2));
-    const addColumn = () => {
-      const dataIndex = "column-" + uuid++;
-      let column = {
-        title: "demo列",
-        dataIndex,
-        key: dataIndex,
-      };
-      columns.value.push(column);
-    };
 
     watch(dataSource, () => {
       dataSourceStr.value = JSON.stringify(dataSource.value, null, 2);
@@ -56,10 +58,13 @@ export default defineComponent({
       }
     });
 
+    const visible = ref<boolean>(false);
+
     return {
       columns,
       dataSourceStr,
       addColumn,
+      visible,
     };
   },
 });
@@ -88,15 +93,10 @@ export default defineComponent({
       margin: 0 5px;
     }
   }
-  .add-wrapper {
-    width: 100px;
-    display: flex;
-    align-items: center;
+  .icongengduo {
     cursor: pointer;
-    .iconjia {
+    &:hover {
       color: @mainThemeColor;
-      font-size: 22px;
-      margin: 0 10px;
     }
   }
 }

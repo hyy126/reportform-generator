@@ -8,6 +8,9 @@
   },
   "dependencies": {
     "ant-design-vue": "^2.0.1",
+    "axios": "^0.21.1",
+    "js-beautify": "^1.13.5",
+    "jszip": "^3.6.0",
     "lodash": "^4.17.21",
     "monaco-editor": "^0.23.0",
     "reset-css": "^5.0.1",
@@ -17,6 +20,7 @@
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/js-beautify": "^1.13.1",
     "@types/sortablejs": "^1.10.6",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",

@@ -23,5 +23,6 @@ export const formAttribute: IFormAttribute = {
     xl: 12,
     xxl: 8
   },
-  useFormCol: true
+  useFormCol: true,
+  defaultValue: '',
 }

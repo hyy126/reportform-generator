@@ -1,58 +1,78 @@
 <template>
   <ul class="operation-wrapper">
     <li @click="preview"><i class="iconfont iconyulan"></i>预览</li>
-    <li @click="importComp"><i class="iconfont icondaoru"></i>导入</li>
-    <li @click="json"><i class="iconfont iconjson"></i>json</li>
+    <li>
+      <a-upload
+        v-model:file-list="fileList"
+        name="file"
+        :before-upload="beforeUpload"
+      >
+        <i class="iconfont icondaoru"></i>导入
+      </a-upload>
+    </li>
     <li @click="clearComponentList"><i class="iconfont iconempty"></i>清空</li>
     <li @click="code"><i class="iconfont icondaima"></i>代码</li>
   </ul>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, nextTick, ref } from "vue";
 
 import { useComponentManage } from "@/hooks/useComponentManage";
+import { useImportFileText } from "@/hooks/useImportFileText";
+import { message } from "@/utils";
 
 export default defineComponent({
   name: "Operation",
   setup() {
     const origin = window.location.origin;
+
+    //预览
     const preview = () => {
       window.open(`${origin}/preview`);
     };
 
-    const { clearComponentList } = useComponentManage();
-
+    //代码
     const code = () => {
       window.open(`${origin}/code`);
     };
-    const json = () => {
-      window.open(`${origin}/json`);
-    };
-    //导入
-    const importComp = () => {
-      const a = document.createElement("a");
-      const blob = new Blob([
-        `${JSON.stringify(
-          JSON.parse(window.localStorage._componentlist),
-          null,
-          2
-        )}`,
-      ]);
 
-      a.download = "fileName.json";
-      a.style.display = "none";
-      a.href = URL.createObjectURL(blob);
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    const {
+      clearComponentList,
+      replaceComponentByModel,
+    } = useComponentManage();
+
+    //解析导入组件
+    const analysisComponentJsonText = (text: string) => {
+      try {
+        let componentList = JSON.parse(text);
+        replaceComponentByModel(componentList);
+        message.success("组件导入成功");
+      } catch (error) {
+        message.error("文件解析异常,请上传正确格式组件json");
+      }
     };
-    return { preview, clearComponentList, code, json, importComp };
+
+    const { fileList, beforeUpload } = useImportFileText(
+      analysisComponentJsonText
+    );
+
+    return {
+      preview,
+      clearComponentList,
+      code,
+      fileList,
+      beforeUpload,
+    };
   },
 });
 </script>
 
 <style lang="less" scoped>
+.operation-wrapper:deep(.ant-upload) {
+  color: @mainThemeColor !important;
+}
+
 .operation-wrapper {
   padding: 0 20px;
   display: flex;

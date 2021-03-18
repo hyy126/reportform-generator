@@ -13,7 +13,6 @@ try {
 } catch (error) {
 
 }
-console.log(initComponentList)
 // 组件集合
 export const componentList = ref<IComponent[]>(initComponentList)
 
@@ -25,7 +24,6 @@ export const curSelectComponent = ref<IComponent>(initComponentList[0] || null);
 // }, 5000)
 
 watch(componentList, () => {
-  console.log('componentListChange')
   window.localStorage._componentlist = JSON.stringify(componentList.value)
 }, {
   deep: true

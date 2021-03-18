@@ -6,11 +6,9 @@ export const InputConfig: IComponent<IInputComponent> = {
   type: 'Input',
   id: -1,  // uuid 唯一
   config: {
-    defaultValue: '',
     prefix: '',
     suffix: "",
     showCount: false,
-    value: '',
   },
   parent: undefined,
   formAttribute: {

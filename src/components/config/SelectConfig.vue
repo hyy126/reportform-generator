@@ -8,9 +8,6 @@
       :componentProp="componentProp"
       :formAttribute="formAttribute"
     />
-    <a-form-item label="默认值">
-      <a-input v-model:value="componentProp.defaultValue" />
-    </a-form-item>
 
     <a-divider>值选项</a-divider>
 
