@@ -1,8 +1,8 @@
 # reportform-generator
 
-## 可视化报表生成器平台
+## 可视化报表生成器平台(...研发中)
 
-## Vue3 + Ts + AntDesignVue  目前只支持转生成以上代码 后续可能添加
+## Vue3 + Ts + AntDesignVue  目前只支持生成以上代码 后续可能添加
 
 ## Project setup
 ```
