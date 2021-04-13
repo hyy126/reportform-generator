@@ -41,17 +41,31 @@ export interface IComponent<T = componentConfigType> {
   config: T                         //组件配置
 }
 
+export interface ISortConfig {
+  sort: boolean
+  sortType: 'local' | 'server'  //排序方式  本地 | 服务端
+  sortFunStr?: string            //排序方法字符串
+}
+
+export interface ISlots {
+  customRender: string
+  [key: string]: string
+}
+
 export interface ITableColumn {
-  title: string,
-  dataIndex: string,
-  key: string,
-  sorter?: boolean,
-  ellipsis?: boolean,
-  width?: number,
-  colSpan?: number,
-  align?: 'left' | 'right' | 'center',
-  fixed?: false | true | 'left' | 'right',
+  title: string
+  dataIndex: string
+  key: string
+  sorter?: ((a: any, b: any) => boolean) | boolean | string
+  sortDirections?: string[]
+  sorterConfig: ISortConfig
+  ellipsis?: boolean
+  width?: number
+  //colSpan?: number
+  align?: 'left' | 'right' | 'center'
+  fixed?: false | true | 'left' | 'right'
   children?: ITableColumn[] | null
+  slots?: ISlots
 }
 
 export interface IDataSource {
@@ -62,10 +76,50 @@ export const isTableComponent = (component: componentConfigType): component is I
   return (<ITableComponent>component).columns !== undefined
 }
 
+// table row-selection
+export interface IRowSelection {
+  onChange?: (selectedRowKeys: any, selectedRows: any) => void
+  selectedRowKeys?: string[]
+  fixed?: boolean
+  hideDefaultSelections?: boolean
+  type?: 'checkbox' | 'radio'
+  onSelect?: Function
+  onSelectAll?: Function
+  getCheckboxProps?: (record: any) => any
+}
+
+export interface IRowSelectionConfig {
+  type: 'checkbox' | 'radio'
+  fixed: boolean
+  disabled: boolean
+  disabledText: string
+  defaultChecked: boolean
+  defaultCheckedText: string
+}
+
+export interface ITableConfig {
+  bordered?: boolean   //边框
+  rowClassName?: (record: any, index: number) => string  //表格行类名
+  rowClassNameStr?: string
+  rowClassNameConfig: 'null' | 'striped' | 'custom'
+  childrenColumnName?: string  //指定树形结构的列名
+  defaultExpandAllRows?: boolean //初始时,是否展开所有行
+  loading?: boolean         //页面是否加载中
+  scroll?: {                //滚动设置
+    x?: number | true
+    y?: number
+  },
+  showHeader?: boolean  //是否显示表头
+  size?: 'default' | 'middle' | 'small'
+  rowSelection?: IRowSelection             //左列选择项
+  rowSelectionConfig?: IRowSelectionConfig //选择项配置
+}
+
 /* 表格 */
 export interface ITableComponent {
   columns: ITableColumn[]
   dataSource: IDataSource[]
+  tableConfig: ITableConfig
 }
 
 /*单行文本 */

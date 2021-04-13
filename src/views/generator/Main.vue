@@ -47,7 +47,8 @@
 <script lang="ts">
 import { defineComponent, nextTick, onMounted, watchEffect } from "vue";
 
-import Table from "@/components/views/Table.vue";
+import Table from "@/components/views/Table.tsx";
+//import Table from "@/components/views/Table.vue";
 // import Input from "@/components/views/Input.vue";
 // import Select from "@/components/views/Select.vue";
 // import DatePicker from "@/components/views/DatePicker.vue";

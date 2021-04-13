@@ -22,7 +22,6 @@ export const getComponentConfigByType = (type: componentType): IComponent => {
   let sourceComponent = componentConfigObj[type]
 
   let component = copyObject<IComponent>(sourceComponent)
-
   let timestamp = (new Date()).getTime();
   let uuidValue = uuidMap.get(timestamp)
   uuidMap.set(timestamp, uuidValue ? uuidValue + 1 : 1)

@@ -54,7 +54,7 @@ export default defineComponent({
     height: 20px;
     .flex-center();
     background: @mainThemeColor;
-    z-index: 1;
+    z-index: 2;
     color: #fff;
     cursor: move;
   }
@@ -67,7 +67,7 @@ export default defineComponent({
     border-radius: 50%;
     border: 1px solid @redColorShallow;
     .flex-center();
-    z-index: 1;
+    z-index: 2;
     color: @redColorShallow;
     cursor: pointer;
     background: #fff;

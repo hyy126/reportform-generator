@@ -44,3 +44,5 @@ export const beautifierConf = {
 export const beautifyJs = (code: string) => beautify.js(code)
 
 export const beautifyHtml = (code: string) => beautify.html(code)
+
+export const beautifyCss = (code: string) => beautify.css(code)

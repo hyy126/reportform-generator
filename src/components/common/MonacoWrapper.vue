@@ -49,7 +49,7 @@ export default defineComponent({
   },
   components: { Monaco },
   setup(prop) {
-    const activeTab = ref<ITabObj>(prop.tabList[0]);
+    const activeTab = ref<ITabObj>(prop.tabList[1]);
 
     // dev ComponentRenderContext
     const monacoEl = ref<any>();

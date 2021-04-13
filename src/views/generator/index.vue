@@ -44,8 +44,10 @@ export default defineComponent({
     .layout-leftside {
       width: 250px;
       height: 100%;
+      overflow: auto;
     }
     .layout-content {
+      overflow: auto;
       flex: 1;
       border-right: 1px solid #ccc;
       border-left: 1px solid #ccc;
@@ -53,6 +55,7 @@ export default defineComponent({
     .layout-rightside {
       width: 300px;
       height: 100%;
+      overflow: auto;
     }
   }
 }

@@ -17,11 +17,7 @@ try {
 export const componentList = ref<IComponent[]>(initComponentList)
 
 //当前选中组件
-export const curSelectComponent = ref<IComponent>(initComponentList[0] || null);
-
-// setInterval(() => {
-//   window.localStorage.componentlist = JSON.stringify(componentList.value)
-// }, 5000)
+export const curSelectComponent = ref<IComponent>();
 
 watch(componentList, () => {
   window.localStorage._componentlist = JSON.stringify(componentList.value)
@@ -98,6 +94,38 @@ const addComponent = (type: componentType) => {
   //     })
   //   })
   // }
+
+  // if (type === 'Table' && isTableComponent(component.config)) {
+  //   let columns = component.config.columns;
+  //   columns.forEach((obj: any, index: number) => {
+  //     columns[index] = new Proxy(obj, {
+  //       get: function (target, propKey, receiver) {
+  //         if (propKey === "sorter") {
+  //           const { sort, sortType, sortFunStr } = Reflect.get(target, 'sorterConfig', receiver);
+
+  //           if (sort) {
+  //             if (sortType === 'server') {
+  //               return true
+  //             } else {
+  //               const oldValue = Reflect.get(target, propKey, receiver);
+  //               let evalFun = () => { }
+  //               try {
+  //                 evalFun = oldValue || eval(`${sortFunStr}`)
+  //               } catch (error) {
+  //               }
+  //               return evalFun
+  //             }
+  //           } else {
+  //             return false
+  //           }
+  //         } else {
+  //           return Reflect.get(target, propKey, receiver)
+  //         }
+  //       },
+  //     })
+  //   })
+  // }
+
   selectComponent(component)
   if (!isFormType) {
     componentList.value.push(component)
@@ -109,9 +137,11 @@ const addComponent = (type: componentType) => {
  * @param component 
  */
 const selectComponent = (component: IComponent) => {
-  curSelectComponent.value = component
-  if (component.type === 'Table') {
-    changeTableComponent(component as IComponent<ITableComponent>)
+  if (curSelectComponent.value !== component) {
+    curSelectComponent.value = component
+    if (component.type === 'Table') {
+      changeTableComponent(component as IComponent<ITableComponent>)
+    }
   }
 }
 
@@ -127,6 +157,10 @@ const deleteComponent = (component: IComponent) => {
   if (curSelectComponent.value.type === 'Table') {
     changeTableComponent(curSelectComponent.value as IComponent<ITableComponent>)
   }
+}
+
+if (initComponentList[0]) {
+  selectComponent(initComponentList[0])
 }
 
 export const useComponentManage = () => {

@@ -47,7 +47,7 @@ export default defineComponent({
     });
 
     const toLink = () => {
-      let opener = window.open(curSelectComponent.value.link);
+      let opener = window.open(curSelectComponent.value?.link);
       opener!.opener = null;
     };
 

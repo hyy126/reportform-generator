@@ -1,51 +1,146 @@
+import { useTableConfig } from '@/hooks/useTableConfig';
+import { ITableColumn } from './../typings/index';
+import { copyArray } from './index';
+import { useRowSelection } from '@/hooks/useRowSelection';
 import { beautifyJs, beautifyHtml } from './beautify';
 import { IComponent, ITableComponent, IFormComtainerComponent } from '@/typings';
 
 /**
- * 生成代码
+ * 处理表格列数据
+ * @param columns 
  */
+const handleTableColumn = (columns: ITableColumn[]): string => {
+  const columnCopy = copyArray<ITableColumn>(columns)
 
+  const { normalizeColumnSort } = useTableConfig()
+
+  normalizeColumnSort(columnCopy, false)
+
+  let columnsStr = JSON.stringify(columnCopy, (key: string, value: any) => {
+    if (key === 'key') {
+      return
+    }
+    // 过滤默认属性
+    if (key === 'fixed' && !value) {
+      return
+    }
+    if (key === 'align' && value === 'left') {
+      return
+    }
+    if (key === 'sortDirections' && JSON.stringify(value) === '["ascend","descend"]') {
+      return
+    }
+    if (key === 'sorterConfig') {
+      return
+    }
+    if (key === 'sorter' && typeof value === 'string') {
+      return `_TT${value}_TT`
+    }
+    return value
+  }, 2)
+
+  //将函数字符串变为函数
+  columnsStr = columnsStr.replace(/\"_TT/g, "").replace(/\_TT"/g, "")
+
+  return columnsStr
+}
+
+/**
+ * 表格代码
+ * @param component 
+ */
 export const genTable = (component: IComponent<ITableComponent>) => {
   const { id, config } = component
-  const { columns, dataSource } = config
+  const { columns, dataSource, tableConfig } = config
+
+  const { rowClassNameConfig, bordered, defaultExpandAllRows, childrenColumnName, scroll, showHeader, size, rowSelectionConfig, rowSelection, rowClassNameStr } = tableConfig
+
+  const { createRowSelection } = useRowSelection()
+
+  let rowSelectionStr = ''
+  if (rowSelection) {
+    rowSelectionStr = createRowSelection(rowSelectionConfig!)
+  }
 
   const dataSourceStr = JSON.stringify(dataSource, null, 2)
-  const columnsStr = JSON.stringify(columns, (key: string, value: any) => { if (key === 'key') { return } return value }, 2)
+
+  const columnsStr = handleTableColumn(columns)
+
   let htmlCode = `<a-table
+    class="my-table"
     :dataSource="dataSource"
     :columns="columns"
     :rowKey="(record) => record.id"
+    ${bordered ? `:bordered="true"` : ''}
+    ${defaultExpandAllRows ? `:defaultExpandAllRows="true"` : ''}
+    ${childrenColumnName && childrenColumnName !== 'children' ? `:childrenColumnName="${childrenColumnName}"` : ''}
+    ${!showHeader ? `:show-header="false"` : ''}
+    ${size !== 'default' ? `:size="${size}"` : ''}
+    ${(scroll && (scroll.x || scroll.y)) ? `:scroll="${JSON.stringify(scroll)}"` : ''}
+    ${rowClassNameStr ? `:row-className="${rowClassNameStr}"` : ''}
+    ${rowSelection ? `:row-selection="rowSelection"` : ''}
+    :loading="loading"
+    @change="tableChange"
   />`;
 
-  let jsCode = `import { defineComponent, reactive, toRefs } from "vue";
+  //去除空行
+  htmlCode = htmlCode.replace(/(\n[\s\t]*\r*\n)/g, '\n').replace(/^[\n\r\n\t]*|[\n\r\n\t]*$/g, '')
 
+  let jsCode = `
   export default defineComponent({
   name: "Table-${id}",
   setup() {
     const reactiveData = reactive({
       dataSource: ${dataSourceStr},
       columns: ${columnsStr},
+      loading:false
     });
+
+    ${rowSelection ? `const rowSelection = ${rowSelectionStr}` : ''}
+
+    const tableChange = (...args: any[]) => {
+      
+    };
 
     return {
       ...toRefs(reactiveData),
+      tableChange,
+      ${rowSelection ? `rowSelection` : ''}
     };
   },
   });`
 
-  let beautifyHtmlCode = beautifyHtml(htmlCode)
+  //beautifyHtml(htmlCode)
+  let beautifyHtmlCode = htmlCode
   let beautifyJsCode = beautifyJs(jsCode)
 
+  let cssStr = ``
+  //添加class样式
+  if (rowClassNameConfig === 'striped') {
+    cssStr += `
+    <style lang="less" scoped>
+    .my-table:deep(.table-striped) {
+      background-color: #fafafa;
+    }
+    </style>`
+  }
   return `
   <template>
     ${beautifyHtmlCode}
   </template>
   <script lang="ts">
-    ${beautifyJsCode}
+  import { defineComponent, reactive, toRefs } from "vue";
+
+  ${beautifyJsCode}
   </script>
+  ${cssStr}
   `
 }
 
+/**
+ * 首页代码
+ * @param componentList 
+ */
 export const genIndex = (componentList: IComponent[]) => {
   return `<template>
   <section class="wrapper">
@@ -115,6 +210,10 @@ export default {
 `
 }
 
+/**
+ * 
+ * @param component 表单代码
+ */
 export const genForm = (component: IComponent<IFormComtainerComponent>) => {
 
   let htmlCode = `<a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -208,11 +307,21 @@ export default defineComponent({
   `
 }
 
-
+/**
+ * 生成代码
+ * @param componentList 
+ */
 export const genCode = (componentList: IComponent[]) => {
+  let tableTemplate = '';
+  let formTemplate = '';
   let indexTemplate = genIndex(componentList)
-  let formTemplate = genForm(componentList[0] as IComponent<IFormComtainerComponent>)
-  let tableTemplate = genTable(componentList[1] as IComponent<ITableComponent>)
+  componentList.forEach((component: IComponent) => {
+    if (component.type === 'Table') {
+      tableTemplate = genTable(component as IComponent<ITableComponent>)
+    } else if (component.type === 'FormContainer') {
+      formTemplate = genForm(component as IComponent<IFormComtainerComponent>)
+    }
+  })
 
   return {
     indexTemplate,

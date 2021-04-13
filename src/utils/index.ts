@@ -26,7 +26,7 @@ export const _callWithErrorHandling = async <T = any>(fn: Function): Promise<T> 
 }
 
 //拷贝数组
-export const copyArray = (data: any[]) => {
+export const copyArray = <T = any>(data: T[]): T[] => {
   return data.map((item: any) => ({ ...item }))
 }
 
@@ -38,7 +38,9 @@ export const copyObject = <T = any>(data: object): T => {
 interface IDeepFindParam {
   prop?: string,
   matchValue: any,
-  childProp?: string
+  childProp?: string,
+  cleanChildProp?: boolean,
+  hasDelete?: boolean
 }
 
 /**
@@ -47,8 +49,8 @@ interface IDeepFindParam {
  * @param deepFindParam 
  * @return { parent, matchIndex }
  */
-export const deepFind = (tree: any, deepFindParam: IDeepFindParam) => {
-  const { prop = 'id', matchValue, childProp = 'children' } = deepFindParam
+export const deepFind = <T = any>(tree: any, deepFindParam: IDeepFindParam): { parent: T[], matchIndex: number } => {
+  const { prop = 'id', matchValue, childProp = 'children', cleanChildProp = false } = deepFindParam
   let matchIndex = -1
   let parent = tree
 
@@ -58,10 +60,15 @@ export const deepFind = (tree: any, deepFindParam: IDeepFindParam) => {
       break;
     }
     if (tree[i][childProp]) {
-      const { parent: childParent, matchIndex: matchIndexChild } = deepFind(tree[i][childProp], deepFindParam)
+      const { parent: childParent, matchIndex: matchIndexChild } = deepFind<T>(tree[i][childProp], deepFindParam)
       if (matchIndexChild !== -1) {
         matchIndex = matchIndexChild
         parent = childParent;
+        //删除父级元素children 属性
+        if (cleanChildProp && parent.length === 1 && !deepFindParam.hasDelete) {
+          deepFindParam.hasDelete = true
+          delete tree[i][childProp]
+        }
         break;
       }
     }
